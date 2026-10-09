@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Switching Project: Animated Slides</title>
+
+    <style>
+      :root {
+        box-sizing: border-box;
+        --bg: #f4f7fa;
+        --card: #ffffff;
+        --ink: #1b2733;
+        --mut: #5b6b7b;
+        --teal: #1f9e9a;
+        --blue: #2f6fdb;
+        --org: #e8892b;
+        --red: #d64545;
+        --grn: #2e9e5b;
+        --line: #9aa9b8;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #0e1a2b;
+          --card: #16263b;
+          --ink: #e6edf5;
+          --mut: #9fb1c4;
+          --line: #5e7388;
+        }
+      }
+
+      :root[data-theme="dark"] {
+        --bg: #0e1a2b;
+        --card: #16263b;
+        --ink: #e6edf5;
+        --mut: #9fb1c4;
+        --line: #5e7388;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      }
+
+      .deck {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      section {
+        display: none;
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        flex-direction: column;
+        gap: 10px;
+        max-width: 960px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 16px 18px;
+        box-sizing: border-box;
+      }
+
+      section.act {
+        display: flex;
+        animation: in 0.5s;
+      }
+
+      @keyframes in {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+      }
+
+      h1 {
+        font-size: clamp(28px, 6vw, 46px);
+        margin: 0;
+      }
+
+      h2 {
+        font-size: clamp(20px, 4vw, 28px);
+        margin: 0;
+      }
+
+      .sub {
+        color: var(--mut);
+        margin: 0;
+      }
+
+      svg {
+        width: 100%;
+        height: auto;
+        max-height: 44vh;
+        background: var(--card);
+        border-radius: 12px;
+        flex-shrink: 0;
+      }
+
+      .cap {
+        min-height: 2.6em;
+        font-size: clamp(14px, 2.6vw, 18px);
+        font-weight: 600;
+        color: var(--teal);
+      }
+
+      pre {
+        background: #1e2a3a;
+        color: #e6edf5;
+        padding: 10px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        margin: 0;
+        overflow-x: auto;
+      }
+
+      .q {
+        opacity: 0;
+        transition: opacity 0.5s;
+      }
+
+      .sw {
+        fill: #2b4a7a;
+      }
+
+      .tx {
+        fill: var(--ink);
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .wt {
+        fill: #fff;
+        font-size: 20px;
+        font-weight: 700;
+      }
+
+      .ln {
+        stroke: var(--line);
+        stroke-width: 3;
+        fill: none;
+      }
+
+      .tr {
+        stroke: var(--teal);
+        stroke-width: 8;
+      }
+
+      .bad {
+        stroke: var(--red) !important;
+        stroke-dasharray: 9 7;
+      }
+
+      .pc {
+        fill: var(--card);
+        stroke: var(--line);
+        stroke-width: 2;
+      }
+
+      .bl { fill: var(--blue); }
+      .or { fill: var(--org); }
+      .rd { fill: var(--red); }
+      .gn { fill: var(--grn); }
+
+      .rdt {
+        fill: var(--red);
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .gnt {
+        fill: var(--grn);
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .nav {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        border-top: 1px solid var(--line);
+      }
+
+      button {
+        font: inherit;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: var(--card);
+        color: var(--ink);
+        cursor: pointer;
+      }
+
+      button.p {
+        background: var(--teal);
+        color: #fff;
+        border-color: var(--teal);
+      }
+
+      #cnt {
+        color: var(--mut);
+        min-width: 54px;
+        text-align: center;
+      }
+
+      .row {
+        background: var(--card);
+        border-radius: 10px;
+        padding: 12px 14px;
+        animation: in 0.6s backwards;
+      }
+
+      .info {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      details {
+        background: var(--card);
+        border-radius: 10px;
+        padding: 10px 14px;
+      }
+
+      summary {
+        cursor: pointer;
+        font-weight: 700;
+        color: var(--teal);
+      }
+
+      details p,
+      details li {
+        margin: 6px 0;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
+      details ol,
+      details ul {
+        margin: 6px 0;
+        padding-left: 20px;
+      }
+
+      .uni {
+        font-size: clamp(28px, 7vw, 52px);
+        font-weight: 800;
+        letter-spacing: 2px;
+        color: var(--teal);
+        animation: in 0.8s both;
+      }
+
+      .cgrid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 12px;
+        width: 100%;
+        text-align: left;
+      }
+
+      .cbox h3 {
+        margin: 0 0 6px;
+        font-size: 15px;
+        color: var(--teal);
+      }
+
+      .cbox p {
+        margin: 4px 0;
+        font-size: 15px;
+        line-height: 1.4;
+      }
+
+      .ty {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0 0.15em;
+        font-size: clamp(44px, 13vw, 110px);
+        font-weight: 800;
+        color: var(--teal);
+      }
+
+      .ty span {
+        display: inline-block;
+        animation: pop 0.7s backwards, wave 2.4s ease-in-out infinite;
+      }
+
+      @keyframes pop {
+        0% {
+          opacity: 0;
+          transform: translateY(50px) scale(0.4);
+        }
+        60% {
+          opacity: 1;
+          transform: translateY(-14px) scale(1.15);
+        }
+        100% {
+          transform: none;
+        }
+      }
+
+      @keyframes wave {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-12px);
+        }
+      }
+
+      .conf i {
+        position: absolute;
+        top: -20px;
+        width: 8px;
+        height: 14px;
+        border-radius: 2px;
+        animation: fall linear infinite;
+      }
+
+      @keyframes fall {
+        to {
+          transform: translateY(110vh) rotate(720deg);
+        }
+      }
+
+      .tys {
+        font-size: clamp(16px, 3.5vw, 24px);
+        animation: in 1s 1.6s both;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="deck">
+      <section class="act" id="s0" style="align-items:center;text-align:center;justify-content:center">
+        <div class="uni">UTTARA UNIVERSITY</div>
+        <div class="sub">Department of Computer Science and Engineering (CSE)</div>
+        <h2 style="animation:in .8s .3s both">Switching Problems and Solutions</h2>
+
+        <div class="cgrid">
+          <div class="row cbox" style="animation-delay:.5s">
+            <h3>Submitted By</h3>
+            <p><b>MD. Syedur Rahman Bhuyan</b><br />ID: 2233081566</p>
+            <p><b>MD. Maidul Islam Fahim</b><br />ID: 2233081418</p>
+            <p><b>Pranto Kumar Shil</b><br />ID: 2233081405</p>
+            <p><b>Seam Sikder Nahid</b><br />ID: 2233081415</p>
+          </div>
+
+          <div class="row cbox" style="animation-delay:.9s">
+            <h3>Course Information</h3>
+            <p><b>Department:</b> CSE</p>
+            <p><b>Batch:</b> 60 &nbsp; <b>Section:</b> A</p>
+            <p><b>Course Title:</b> SWITCHING AND ROUTING</p>
+            <p><b>Course Code:</b> CSE0612401</p>
+
+            <h3 style="margin-top:12px">Submitted To</h3>
+            <p>
+              <b>Dr Mohammad Amanul Islam</b><br />Assistant Professor, Dept of CSE<br />Uttara University
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <button class="p" onclick="go(1)">Start</button>
+        </div>
+      </section>
+
+      <section id="sI" style="justify-content:center">
+        <h1>Switching Project</h1>
+        <p class="sub">
+          Layer 2 switching problems with animated walkthroughs: VLANs and trunking,
+          Spanning Tree, EtherChannel and port security.
+        </p>
+        <p class="sub">Course: Switching &amp; Routing</p>
+
+        <div class="info">
+          <details open>
+            <summary>What is a switch, and what is a "switching problem"?</summary>
+            <p>
+              A switch connects devices inside one LAN. It learns each device's MAC
+              address and forwards Ethernet frames only to the right port.
+            </p>
+            <p>
+              A <b>switching problem</b> is a Layer 2 design or fault question, such as:
+              how do I separate groups of users (VLANs), stop loops when links are
+              redundant (STP), use extra links efficiently (EtherChannel), or control
+              who can plug in (port security)? This project solves one of each.
+            </p>
+          </details>
+        </div>
+
+        <div>
+          <button class="p" onclick="go(2)">Start</button>
+        </div>
+      </section>
+
+      <section id="s1">
+        <h2>Problem 1: VLANs and Trunking</h2>
+        <p class="sub">Sales (VLAN 10) and HR (VLAN 20) share two switches and one trunk.</p>
+
+        <svg viewBox="0 0 800 330">
+          <path class="ln" d="M70 70L150 140M70 260L150 160M650 140L730 70M650 160L730 260"/>
+          <path id="trk" class="ln tr" d="M250 150H550"/>
+          <rect class="sw" x="150" y="110" width="100" height="80" rx="10" />
+          <text class="wt" x="200" y="158" text-anchor="middle">SW1</text>
+          <rect class="sw" x="550" y="110" width="100" height="80" rx="10" />
+          <text class="wt" x="600" y="158" text-anchor="middle">SW2</text>
+          <rect class="pc" x="22" y="45" width="96" height="50" rx="8" />
+          <text class="tx" x="70" y="76" text-anchor="middle">PC1 V10</text>
+          <rect class="pc" x="22" y="235" width="96" height="50" rx="8" />
+          <text class="tx" x="70" y="266" text-anchor="middle">PC2 V20</text>
+          <rect id="pc3" class="pc" x="682" y="45" width="96" height="50" rx="8" />
+          <text class="tx" x="730" y="76" text-anchor="middle">PC3 V10</text>
+          <rect class="pc" x="682" y="235" width="96" height="50" rx="8" />
+          <text class="tx" x="730" y="266" text-anchor="middle">PC4 V20</text>
+          <text class="tx q" id="tg" x="400" y="130" text-anchor="middle">802.1Q tag: VLAN 10</text>
+          <text class="rdt q" id="x1" x="200" y="215" text-anchor="middle">✕ not forwarded</text>
+          <circle id="p1" class="bl q" r="10" cx="70" cy="70" />
+          <circle id="p2" class="or q" r="10" cx="70" cy="260" />
+        </svg>
+
+        <div class="cap" id="c1"></div>
+
+        <pre>vlan 10 / vlan 20 / vlan 99        interface gi0/1
+interface fa0/1 → switchport access vlan 10   switchport mode trunk
+interface fa0/2 → switchport access vlan 20   switchport trunk native vlan 99</pre>
+
+        <div class="info">
+          <details open>
+            <summary>What is the problem?</summary>
+            <p>
+              Sales and HR users are connected to the same switches, so all of them share
+              one broadcast domain: every broadcast reaches everyone and there is no
+              separation. The users are also spread over two switches, so each department
+              must stay together across both.
+            </p>
+            <p><i>Analogy:</i> one big open office versus separate rooms for each department.</p>
+          </details>
+
+          <details>
+            <summary>How it works</summary>
+            <ol>
+              <li>
+                A <b>VLAN</b> is a logical group of ports. Each access port belongs to exactly
+                one VLAN.
+              </li>
+              <li>
+                A switch forwards a frame only to ports in the same VLAN, so broadcasts stay
+                within the VLAN.
+              </li>
+              <li>
+                A trunk carries tagged frames between switches, and the receiving switch removes
+                the tag before delivery to the final port.
+              </li>
+              <li>
+                PC1 and PC3 share VLAN 10; PC2 and PC4 share VLAN 20. The trunk uses 802.1Q
+                tagging.
+              </li>
+            </ol>
+          </details>
+
+          <details>
+            <summary>How to solve it (steps)</summary>
+            <ol>
+              <li>Make a plan table: VLAN IDs, names, ports, IP addresses.</li>
+              <li>Create VLANs 10, 20, 99 on <b>both</b> switches.</li>
+              <li>Set each access port: switchport mode access, then switchport access vlan X.</li>
+              <li>Configure the trunk on both ends: mode trunk, native VLAN 99, allowed VLANs.</li>
+              <li>Verify: show vlan brief, show interfaces trunk, then ping.</li>
+            </ol>
+            <p>
+              <b>Common mistakes:</b> VLAN missing on the second switch, VLAN not in the trunk's
+              allowed list, native VLAN mismatch, wrong IP subnet on a PC.
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <section id="s2">
+        <h2>Problem 2: Spanning Tree Protocol</h2>
+        <p class="sub">Three switches in a triangle, FastEthernet links (cost 19), default priority.</p>
+
+        <svg viewBox="0 0 800 340">
+          <path class="ln" d="M400 60L170 250M400 60L630 250" />
+          <path id="l23" class="ln" d="M170 250H630" />
+          <circle id="n1" class="sw" cx="400" cy="60" r="30" />
+          <text class="wt" x="400" y="67" text-anchor="middle">SW1</text>
+          <circle class="sw" cx="170" cy="250" r="30" />
+          <text class="wt" x="170" y="257" text-anchor="middle">SW2</text>
+          <circle class="sw" cx="630" cy="250" r="30" />
+          <text class="wt" x="630" y="257" text-anchor="middle">SW3</text>
+
+          <g class="tx" style="font-size:15px">
+            <text class="q" id="b1" x="400" y="20" text-anchor="middle">BID 32769 · 0000.0C11.1111</text>
+            <text class="q" id="b2" x="170" y="312" text-anchor="middle">BID 32769 · 0000.0C22.2222</text>
+            <text class="q" id="b3" x="630" y="312" text-anchor="middle">BID 32769 · 0000.0C33.3333</text>
+          </g>
+
+          <text class="gnt q" id="rt" x="450" y="65">ROOT BRIDGE</text>
+
+          <g class="tx">
+            <text class="q cs" x="255" y="140">cost 19</text>
+            <text class="q cs" x="500" y="140">cost 19</text>
+            <text class="q cs" x="400" y="240" text-anchor="middle">cost 19</text>
+          </g>
+
+          <g class="gnt">
+            <text class="q" id="rp2" x="205" y="205">RP</text>
+            <text class="q" id="rp3" x="580" y="205">RP</text>
+            <text class="q" id="d1a" x="350" y="105">DP</text>
+            <text class="q" id="d1b" x="430" y="105">DP</text>
+            <text class="q" id="d2" x="215" y="235">DP</text>
+          </g>
+
+          <text class="rdt q" id="bk" x="545" y="235">BLOCKED</text>
+          <circle id="q1" class="bl q" r="10" cx="170" cy="250" />
+          <circle id="q2" class="or q" r="10" cx="170" cy="250" />
+        </svg>
+
+        <div class="cap" id="c2"></div>
+
+        <pre>spanning-tree vlan 1 priority 4096     ! make SW3 the root instead
+show spanning-tree vlan 1</pre>
+
+        <div class="info">
+          <details open>
+            <summary>What is the problem?</summary>
+            <p>
+              Redundant links keep the network working if one cable fails, but they create a
+              <b>loop</b>. Ethernet frames have no time-to-live, so a broadcast circles forever,
+              causing a <b>broadcast storm</b>, an unstable MAC table and switches running at
+              100% CPU.
+            </p>
+          </details>
+
+          <details>
+            <summary>How it works</summary>
+            <ol>
+              <li>
+                Switches exchange <b>BPDU</b> messages (every 2 seconds) containing their Bridge
+                ID = priority + VLAN ID + MAC.
+              </li>
+              <li>
+                <b>Root bridge:</b> lowest Bridge ID wins (priority first, then lowest MAC).
+              </li>
+              <li>
+                <b>Root port:</b> on every non-root switch, the port with the lowest total cost
+                to the root. Costs: FastEthernet 19, GigabitEthernet 4.
+              </li>
+              <li>
+                <b>Designated port:</b> on every link, one side forwards. The side with the lower
+                cost to root wins; a tie goes to the lower Bridge ID.
+              </li>
+              <li>
+                Any port that is neither root nor designated is <b>blocked</b>. It still listens
+                for BPDUs.
+              </li>
+              <li>
+                If a link fails, a blocked port moves to forwarding (listening, learning,
+                forwarding).
+              </li>
+            </ol>
+          </details>
+
+          <details>
+            <summary>How to solve it (steps)</summary>
+            <ol>
+              <li>Write the Bridge ID of each switch.</li>
+              <li>Find the lowest: that switch is the root.</li>
+              <li>For each other switch, add up the cost to the root and pick the root port.</li>
+              <li>For each link, decide the designated port (cost, then Bridge ID).</li>
+              <li>Mark the remaining port as blocked.</li>
+              <li>Verify with show spanning-tree.</li>
+            </ol>
+            <p>
+              <b>To choose the root yourself:</b> lower the priority in steps of 4096 (for example
+              4096).
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <section id="s3">
+        <h2>Problem 3a: EtherChannel (LACP)</h2>
+        <p class="sub">Fa0/23 and Fa0/24 between SW1 and SW2.</p>
+
+        <svg viewBox="0 0 800 300">
+          <path id="ln1" class="ln tr" d="M170 120H630" />
+          <path id="ln2" class="ln tr bad" d="M170 180H630" />
+          <rect class="sw" x="60" y="80" width="110" height="140" rx="10" />
+          <text class="wt" x="115" y="158" text-anchor="middle">SW1</text>
+          <rect class="sw" x="630" y="80" width="110" height="140" rx="10" />
+          <text class="wt" x="685" y="158" text-anchor="middle">SW2</text>
+          <text class="rdt q" id="st" x="400" y="215" text-anchor="middle">blocked by STP (wasted)</text>
+          <text class="gnt q" id="pch" x="400" y="80" text-anchor="middle">Port-channel 1 (LACP active) · 200 Mbps</text>
+          <text class="rdt q" id="cut" x="400" y="215" text-anchor="middle">✕ cable fails</text>
+          <circle id="a" class="bl q" r="9" cx="170" cy="120" />
+          <circle id="b" class="or q" r="9" cx="170" cy="180" />
+        </svg>
+
+        <div class="cap" id="c3"></div>
+
+        <pre>interface range fa0/23 - 24 → channel-group 1 mode active
+interface port-channel 1 → switchport mode trunk      ! same on SW2
+show etherchannel summary</pre>
+
+        <div class="info">
+          <details open>
+            <summary>What is the problem?</summary>
+            <p>
+              Two cables join SW1 and SW2 for more speed and safety, but STP blocks one of
+              them to prevent a loop. So half the bandwidth is wasted and you only get a
+              standby link.
+            </p>
+          </details>
+
+          <details>
+            <summary>How it works</summary>
+            <ol>
+              <li>
+                <b>EtherChannel</b> bundles up to 8 physical links into one logical
+                <b>Port-channel</b>.
+              </li>
+              <li>STP treats the bundle as a single link, so nothing is blocked.</li>
+              <li>
+                Traffic is shared across the links by a hash of MAC or IP addresses. One
+                conversation stays on one link; different conversations use different links.
+              </li>
+              <li>
+                <b>LACP</b> (open standard) negotiates the bundle. Modes: active starts
+                negotiation, passive only answers. Active+active or active+passive works;
+                passive+passive does not.
+              </li>
+              <li>If one link fails, the others keep carrying traffic.</li>
+            </ol>
+          </details>
+
+          <details>
+            <summary>How to solve it (steps)</summary>
+            <ol>
+              <li>Pick the ports (Fa0/23 and Fa0/24) on both switches.</li>
+              <li>On both switches: channel-group 1 mode active.</li>
+              <li>Configure interface port-channel 1 as a trunk.</li>
+              <li>Verify: show etherchannel summary. Po1 should show <b>SU</b> and the ports <b>P</b>.</li>
+            </ol>
+            <p>
+              <b>Common mistakes:</b> member ports with different speed, duplex or VLAN settings;
+              passive on both sides; mixing LACP and PAgP.
+            </p>
+          </details>
+        </div>
+      </section>
+
+      <section id="s4">
+        <h2>Problem 3b: Port Security</h2>
+        <p class="sub">SW1 Fa0/1: maximum 2 MACs, sticky, violation shutdown.</p>
+
+        <svg viewBox="0 0 800 340">
+          <path id="la" class="ln q" d="M150 270L400 130" />
+          <path id="lb" class="ln q" d="M400 290V130" />
+          <path id="lc" class="ln q" d="M650 270L400 130" />
+          <rect id="swp" class="sw" x="320" y="60" width="160" height="70" rx="10" />
+          <text class="wt" x="400" y="102" text-anchor="middle">SW1 Fa0/1</text>
+          <rect class="pc q" id="da" x="80" y="250" width="140" height="50" rx="8" />
+          <text class="tx q" id="ta" x="150" y="281" text-anchor="middle">Laptop A</text>
+          <rect class="pc q" id="db" x="330" y="290" width="140" height="44" rx="8" />
+          <text class="tx q" id="tb" x="400" y="318" text-anchor="middle">Phone B</text>
+          <rect class="pc q" id="dc" x="580" y="250" width="140" height="50" rx="8" />
+          <text class="tx q" id="tc" x="650" y="281" text-anchor="middle">Intruder C</text>
+          <text class="tx" id="cnt" x="20" y="35">Learned MACs: 0 / 2</text>
+          <text class="gnt" id="ps" x="780" y="35" text-anchor="end">Port: up</text>
+          <circle id="r1" class="bl q" r="10" cx="150" cy="270" />
+        </svg>
+
+        <div class="cap" id="c4"></div>
+
+        <pre>interface fa0/1 → switchport port-security
+  switchport port-security maximum 2 / mac-address sticky / violation shutdown
+shutdown → no shutdown          ! recover from err-disabled</pre>
+
+        <div class="info">
+          <details open>
+            <summary>What is the problem?</summary>
+            <p>
+              Anyone can plug a laptop into a free network port and get access, or flood the
+              switch with fake MAC addresses. The network needs a way to control which devices
+              may use each port.
+            </p>
+          </details>
+
+          <details>
+            <summary>How it works</summary>
+            <ol>
+              <li>The switch looks at the source MAC address of frames arriving on a single port.</li>
+              <li>
+                The port security feature records allowed MACs and compares each new source to
+                the learned list.
+              </li>
+              <li>
+                If the number exceeds the configured maximum, it triggers the configured
+                violation action (shutdown, restrict, or protect).
+              </li>
+              <li>Sticky MACs automatically learn the addresses and save them to the running config.</li>
+              <li>
+                Violation shutdown puts the port into err-disabled until you recover with shutdown/
+                no shutdown.
+              </li>
+            </ol>
+          </details>
+
+          <details>
+            <summary>How to solve it (steps)</summary>
+            <ol>
+              <li>Set the port to access mode (port security needs a static access or trunk port).</li>
+              <li>Enable it: switchport port-security.</li>
+              <li>Set maximum 2, mac-address sticky, violation shutdown.</li>
+              <li>Verify: show port-security interface fa0/1.</li>
+              <li>After a violation, remove the intruder, then shutdown and no shutdown the port.</li>
+            </ol>
+          </details>
+        </div>
+      </section>
+
+      <section id="s5" style="justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden">
+        <div class="ty" id="ty"></div>
+        <p class="sub tys">Any questions?</p>
+        <div class="conf" id="conf"></div>
+      </section>
+
+      <div class="nav">
+        <button onclick="go(cur-1)">Prev</button>
+        <button onclick="go(cur)">Replay</button>
+        <span id="cnt0">1 / 7</span>
+        <button class="p" onclick="go(cur+1)">Next</button>
+      </div>
+    </div>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+      let cur = 0;
+      let tok = 0;
+
+      const sleep = (ms, t) => new Promise((resolve, reject) => {
+        setTimeout(() => (t === tok ? resolve() : reject()), ms);
+      });
+
+      const show = (...ids) => ids.forEach((id) => { $(id).style.opacity = 1; });
+      const hide = (...ids) => ids.forEach((id) => { $(id).style.opacity = 0; });
+      const cap = (index, text) => { $('c' + index).textContent = text; };
+
+      function mv(el, pts, ms, t) {
+        return new Promise((resolve, reject) => {
+          let seg = 0;
+          let start = performance.now();
+          const last = pts.length - 1;
+          const per = ms / last;
+
+          const set = (p) => {
+            el.setAttribute('cx', p[0]);
+            el.setAttribute('cy', p[1]);
+          };
+
+          el.style.opacity = 1;
+          set(pts[0]);
+
+          function animate(now) {
+            if (t !== tok) {
+              return reject();
+            }
+
+            let k = (now - start) / per;
+
+            if (k >= 1) {
+              seg++;
+              start = now;
+              k = 0;
+
+              if (seg >= last) {
+                set(pts[last]);
+                return resolve();
+              }
+            }
+
+            const a = pts[seg];
+            const b = pts[seg + 1];
+            set([
+              a[0] + (b[0] - a[0]) * k,
+              a[1] + (b[1] - a[1]) * k
+            ]);
+
+            requestAnimationFrame(animate);
+          }
+
+          requestAnimationFrame(animate);
+        });
+      }
+
+      const orig = [...document.querySelectorAll('svg')].map((svg) => svg.innerHTML);
+
+      const S = {
+        1: async (t) => {
+          cap(1, '1. PC1 (VLAN 10) sends a frame to PC3 (VLAN 10)');
+          await mv($('p1'), [[70, 70], [150, 140], [250, 150]], 1200, t);
+          cap(1, '2. SW1 adds an 802.1Q tag and sends the frame over the trunk');
+          show('tg');
+          await mv($('p1'), [[250, 150], [550, 150]], 1500, t);
+          cap(1, '3. SW2 removes the tag and delivers it to PC3: same VLAN, so it works');
+          hide('tg');
+          await mv($('p1'), [[550, 150], [650, 140], [730, 70]], 1200, t);
+          $('pc3').style.stroke = 'var(--grn)';
+          await sleep(900, t);
+          hide('p1');
+
+          cap(1, '4. PC1 now tries PC2 (VLAN 20)');
+          await mv($('p1'), [[70, 70], [150, 140]], 1000, t);
+          show('x1');
+          cap(1, 'SW1 will not forward VLAN 10 traffic to a VLAN 20 port. No router, so no communication.');
+          await sleep(2200, t);
+          hide('p1', 'x1');
+
+          cap(1, '5. PC2 to PC4 (VLAN 20) works across the same trunk');
+          await mv($('p2'), [[70, 260], [150, 160], [250, 150], [550, 150], [650, 160], [730, 260]], 2800, t);
+          cap(1, 'Result: same VLAN communicates across the trunk; different VLANs are isolated.');
+        },
+
+        2: async (t) => {
+          cap(2, '1. Every switch advertises its Bridge ID (priority + MAC)');
+          show('b1', 'b2', 'b3');
+          await sleep(2200, t);
+
+          cap(2, '2. Equal priority, so the lowest MAC wins: SW1 is the root bridge');
+          $('n1').setAttribute('class', 'gn');
+          show('rt');
+          await sleep(2200, t);
+
+          cap(2, '3. Each other switch picks its lowest-cost path to the root: root ports (RP)');
+          document.querySelectorAll('.cs').forEach((element) => {
+            element.style.opacity = 1;
+          });
+          show('rp2', 'rp3', 'd1a', 'd1b');
+          await sleep(2500, t);
+
+          cap(2, '4. SW2-SW3 tie on cost: lower Bridge ID (SW2) is designated, SW3 port is blocked');
+          show('d2', 'bk');
+          $('l23').setAttribute('class', 'ln bad');
+          await sleep(2500, t);
+
+          cap(2, '5. Frames from SW2 reach SW3 only via the root: the loop is gone');
+          await mv($('q1'), [[170, 250], [400, 60], [630, 250]], 2600, t);
+          cap(2, 'A direct SW2 to SW3 frame stops at the blocked port');
+          await mv($('q2'), [[170, 250], [520, 250]], 1200, t);
+          cap(2, 'Result: a loop-free tree rooted at SW1.');
+        },
+
+        3: async (t) => {
+          cap(3, '1. Two physical links, but STP would block one of them');
+          show('st');
+          await sleep(2500, t);
+
+          cap(3, '2. LACP bundles Fa0/23-24 into Port-channel 1: STP sees one logical link');
+          hide('st');
+          $('ln2').setAttribute('class', 'ln tr');
+          show('pch');
+          await sleep(2000, t);
+
+          cap(3, '3. Traffic is shared across both links');
+          for (let i = 0; i < 2; i++) {
+            await Promise.all([
+              mv($('a'), [[170, 120], [630, 120]], 1400, t),
+              mv($('b'), [[170, 180], [630, 180]], 1400, t)
+            ]);
+          }
+
+          cap(3, '4. One cable fails...');
+          hide('b');
+          $('ln2').setAttribute('class', 'ln tr bad');
+          show('cut');
+          await sleep(1500, t);
+
+          cap(3, '...traffic keeps flowing on the remaining link: redundancy');
+          for (let i = 0; i < 3; i++) {
+            await mv($('a'), [[170, 120], [630, 120]], 1300, t);
+          }
+          cap(3, 'Result: more bandwidth plus failover, with no STP blocking.');
+        },
+
+        4: async (t) => {
+          const setCount = (n) => {
+            $('cnt').textContent = 'Learned MACs: ' + n + ' / 2';
+          };
+
+          cap(4, '1. Laptop A connects: its MAC is learned (sticky)');
+          show('la', 'da', 'ta');
+          await mv($('r1'), [[150, 270], [400, 130]], 1200, t);
+          setCount(1);
+          await sleep(1200, t);
+          hide('r1');
+
+          cap(4, '2. Phone B connects: second MAC learned, limit reached');
+          show('lb', 'db', 'tb');
+          await mv($('r1'), [[400, 290], [400, 130]], 1200, t);
+          setCount(2);
+          await sleep(1200, t);
+          hide('r1');
+
+          cap(4, '3. Intruder C connects: a third MAC breaks the limit');
+          show('lc', 'dc', 'tc');
+          await mv($('r1'), [[650, 270], [400, 130]], 1200, t);
+          $('swp').setAttribute('class', 'rd');
+          $('lc').setAttribute('class', 'ln bad');
+          $('ps').setAttribute('class', 'rdt');
+          $('ps').textContent = 'Port: err-disabled';
+
+          cap(4, 'Violation: the port shuts down. Fix with shutdown, then no shutdown.');
+        }
+      };
+
+      function go(index) {
+        const sections = [...document.querySelectorAll('section')];
+
+        if (index < 0 || index >= sections.length) {
+          return;
+        }
+
+        cur = index;
+        tok++;
+
+        sections.forEach((section, key) => {
+          section.classList.remove('act');
+          if (key === index) {
+            void section.offsetWidth;
+            section.classList.add('act');
+          }
+        });
+
+        $('cnt0').textContent = (index + 1) + ' / ' + sections.length;
+
+        const sectionId = sections[index].id.slice(1);
+        const svg = sections[index].querySelector('svg');
+
+        if (svg) {
+          const allSvgs = [...document.querySelectorAll('svg')];
+          svg.innerHTML = orig[allSvgs.indexOf(svg)];
+          $('c' + sectionId).textContent = '';
+        }
+
+        if (S[sectionId]) {
+          S[sectionId](tok).catch(() => {});
+        }
+      }
+
+      $('ty').innerHTML = [...'Thank You']
+        .map((char, index) => {
+          if (char === ' ') {
+            return '<span style="width:100%;height:0"></span>';
+          }
+          return `<span style="animation-delay:${index * 0.12}s,${index * 0.12 + 1}s">${char}</span>`;
+        })
+        .join('');
+
+      $('conf').innerHTML = Array.from({ length: 36 }, (_, index) => {
+        const colors = ['#1F9E9A', '#E8892B', '#2F6FDB', '#D64545', '#2E9E5B'];
+        return `<i style="left:${(index * 37) % 100}%;background:${colors[index % colors.length]};animation-duration:${3 + (index % 5)}s;animation-delay:${(index % 7) * 0.4}s"></i>`;
+      }).join('');
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowRight') {
+          go(cur + 1);
+        }
+        if (event.key === 'ArrowLeft') {
+          go(cur - 1);
+        }
+      });
+    </script>
+  </body>
+</html>
