@@ -4,26 +4,6 @@ An animated group presentation that explains and solves three Layer 2 switching 
 
 Each problem includes a scenario, a step-by-step animation of how it works, the Cisco IOS configuration, and verification commands. It is built to help students understand the topics and explain them to a teacher.
 
-## Course Information
-
-| | |
-|---|---|
-| **University** | Uttara University |
-| **Department** | CSE |
-| **Batch / Section** | 60 / A |
-| **Course Title** | Switching and Routing |
-| **Course Code** | CSE0612401 |
-| **Submitted To** | Dr Mohammad Amanul Islam, Assistant Professor, Dept of CSE, Uttara University |
-
-## Team Members
-
-| Name | ID |
-|---|---|
-| MD. Syedur Rahman Bhuyan | 2233081566 |
-| MD. Maidul Islam Fahim | 2233081418 |
-| Pranto Kumar Shil | 2233081405 |
-| Seam Sikder Nahid | 2233081415 |
-
 ## Problems Covered
 
 ### 1. VLANs and Trunking
